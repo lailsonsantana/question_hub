@@ -108,8 +108,12 @@ public class QuestionService {
     @Transactional
     public List<QuestionRecordDTO> getAllByUser(Long userId){
 
-        List<Question> questions = questionRepository.findAllByUser_id(userId);
-        return mapperQuestion.toQuestionsDTO(questions);
+        List<Question> questions = questionRepository.findAllByOrderByIdAsc();
+
+        return mapperQuestion.toQuestionsDTO(
+               questions.stream().filter(question -> question.getUser().getId()
+                       .equals(userId)).toList()
+        );
     }
 
     @Transactional 

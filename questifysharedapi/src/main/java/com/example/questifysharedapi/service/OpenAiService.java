@@ -23,8 +23,8 @@ public class OpenAiService {
         this.chatModel = openAiChatModel;
     }
 
-    //@Value("${spring.ai.openai.api-key}")
-    //private String apiKey;
+    @Value("${spring.ai.openai.api-key}")
+    private String apiKey;
 
     @Value("${spring.ai.openai.chat.options.model}")
     private String model;
@@ -54,6 +54,5 @@ public class OpenAiService {
 
         return assistantMessage.getContent();
     }
-
 }
 
