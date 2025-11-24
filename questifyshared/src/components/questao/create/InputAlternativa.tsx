@@ -17,7 +17,7 @@ const InputAlternativa: React.FC<InputAlternativaProps> = ({
       <div className="flex flex-grow items-center w-full">
         <input
           required
-          className="w-full outline-none"
+          className="w-full outline-none focus:placeholder-transparent"
           type='text'
           placeholder='Alternativa'
           {...register(name)}

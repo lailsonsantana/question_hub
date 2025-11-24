@@ -54,25 +54,30 @@ const TextEditor: React.FC<TextEditorProps> = ({ initialContent = '', onChange ,
   const alignJustify = () => editor.chain().focus().setTextAlign('justify').run();
 
   return (
-    <div className="w-full border border-gray-300 rounded shadow-inner bg-white max-w-2xl mx-auto p-4 h-[480px]">
-      {/* Barra de ferramentas */}
-      <div className="w-full container grid grid-cols-4 sm:grid-cols-8 gap-2 mb-2 border-b pb-2 ">
-        <button type='button' className="p-2 border rounded w-full" onClick={toggleBold}><BoldIcon size={18}/></button>
-        <button type='button' className="p-2 border rounded w-full" onClick={toggleItalic}><ItalicIcon size={18}/></button>
-        <button type='button' className="p-2 border rounded w-full" onClick={toggleUnderline}><UnderlineIcon size={18}/></button>
-        <button type='button' className="p-2 border rounded w-full" onClick={alignJustify}><AlignJustify size={18}/></button>
-        <button type='button' className="p-2 border rounded w-full" onClick={toggleOrderedList}><ListOrdered size={18}/></button>
-        <button type='button' className="p-2 border rounded w-full" onClick={alignLeft}><AlignLeft size={18} /></button>
-        <button type='button' className="p-2 border rounded w-full" onClick={alignCenter}><AlignCenter size={18} /></button>
-        <button type='button' className="p-2 border rounded w-full" onClick={alignRight}><AlignRight size={18} /></button>
-      </div>
-
-      {/* Área de Edição */}
-      <div >
-        <EditorContent className="border-none shadow-none ring-0 focus:ring-0 outline-none" required editor={editor} onKeyDown={onKeyDown}/>
-      </div>
+  <div className="w-full border border-gray-300 rounded shadow-inner bg-white max-w-2xl mx-auto p-4 h-[480px] flex flex-col">
+    {/* Barra de ferramentas */}
+    <div className="w-full container grid grid-cols-4 sm:grid-cols-8 gap-2 mb-2 border-b pb-2">
+      <button type='button' className="p-2 border rounded w-full" onClick={toggleBold}><BoldIcon size={18}/></button>
+      <button type='button' className="p-2 border rounded w-full" onClick={toggleItalic}><ItalicIcon size={18}/></button>
+      <button type='button' className="p-2 border rounded w-full" onClick={toggleUnderline}><UnderlineIcon size={18}/></button>
+      <button type='button' className="p-2 border rounded w-full" onClick={alignJustify}><AlignJustify size={18}/></button>
+      <button type='button' className="p-2 border rounded w-full" onClick={toggleOrderedList}><ListOrdered size={18}/></button>
+      <button type='button' className="p-2 border rounded w-full" onClick={alignLeft}><AlignLeft size={18} /></button>
+      <button type='button' className="p-2 border rounded w-full" onClick={alignCenter}><AlignCenter size={18} /></button>
+      <button type='button' className="p-2 border rounded w-full" onClick={alignRight}><AlignRight size={18} /></button>
     </div>
-  );
+
+    <div 
+      className="flex-1 overflow-y-auto prose prose-sm max-w-[450px]"
+      onClick={() => editor?.chain().focus().run()}
+      >
+      <EditorContent 
+      editor={editor}
+      className="w-full h-full outline-none prose prose-sm max-w-none"
+      />
+  </div>
+  </div>
+);
 };
 
 export default TextEditor;
