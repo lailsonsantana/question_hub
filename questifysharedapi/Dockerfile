@@ -5,7 +5,7 @@ COPY . .
 RUN mvn dependency:resolve
 RUN mvn clean package -DskipTests
 
-FROM openjdk:21
+FROM amazoncorretto:21
 WORKDIR /app
 COPY --from=builder ./app/target/*.jar ./application.jar
 EXPOSE 8080
