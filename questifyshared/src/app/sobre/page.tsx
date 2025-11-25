@@ -38,7 +38,7 @@ export default function AjudaPage() {
                     de forma resumida você também pode responder questões, fazer comentários nas questões criadas por outros
                     usuários, avaliar a qualidade das questões criadas e modificar questões criadas por outras pessoas (uma espécie de versionamento),
                     mais detalhes sobre funcionalidades e sobre como usar a plataforma podem ser encontrados na página de 
-                    <a href="" className="text-blue-600 hover:underline m-2">Ajuda</a>.
+                    <a href="/ajuda/" className="text-blue-600 hover:underline m-2">Ajuda</a>.
                 </p>
 
                 <p>
