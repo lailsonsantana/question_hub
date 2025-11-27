@@ -69,7 +69,7 @@ export default function InicialPage() {
 
                             <ClassCard 
                                 label="Visualizar" 
-                                title="Veja suas questões" 
+                                title="Visualize suas questões" 
                                 onClick={(event) => handleNavigation(event, '/questoes.criadas')}
                                 imageUrl="/assets/image_card_3.png" 
                                 tela="questoes.criadas"
