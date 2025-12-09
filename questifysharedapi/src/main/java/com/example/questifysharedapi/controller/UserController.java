@@ -28,12 +28,8 @@ public class UserController {
     
 
     @PostMapping
-    public ResponseEntity<User> saveUser(@RequestBody UserRecordDTO userRecordDTO){
-        try{
+    public ResponseEntity<?> saveUser(@RequestBody UserRecordDTO userRecordDTO){
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userRecordDTO));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
     }
 
     @GetMapping
@@ -42,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<?> autheticate(@RequestBody CredentialsDTO credentials){
+    public ResponseEntity<?> authenticate(@RequestBody CredentialsDTO credentials){
         var token = userService.authenticate(credentials.getEmail(), credentials.getPassword());
 
         if(token == null){
@@ -53,9 +49,8 @@ public class UserController {
     }
 
     @PostMapping("/setContext")
-    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Context> setUserContext(@RequestBody String newContext) {
-        ContextRecordDTO crdto = new ContextRecordDTO(newContext);
-        return ResponseEntity.status(HttpStatus.CREATED).body(contextService.saveContext(crdto));
+        ContextRecordDTO contextRecordDTO = new ContextRecordDTO(newContext);
+        return ResponseEntity.status(HttpStatus.CREATED).body(contextService.saveContext(contextRecordDTO));
     }
 }
