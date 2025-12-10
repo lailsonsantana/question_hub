@@ -71,7 +71,6 @@ public class ClassificationService {
             Classification classification = existingClassification.get();
             return classification.getRating();
         }
-        log.info("NADA FOI ENCONTRADO {} - {}" , userId , questionId);
         return 0.0; 
     }
 }

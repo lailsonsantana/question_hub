@@ -54,8 +54,6 @@ class QuestionServiceTest {
     @Captor
     private ArgumentCaptor<Long> questionIdArgumentCaptor;
 
-    private QuestionFactory questionFactory;
-
 
     @Nested
     class saveQuestion{
@@ -65,9 +63,9 @@ class QuestionServiceTest {
         void shouldSaveAQuestionWithSuccess() {
 
             // ARRANGE
-            var user = questionFactory.createValidUser();
-            var question = questionFactory.createValidQuestion();
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
+            var user = QuestionFactory.createValidUser();
+            var question = QuestionFactory.createValidQuestion();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
 
 
             Mockito.when(userRepository.findById(questionRecordDTO.userId())).thenReturn(Optional.of(user));
@@ -91,7 +89,8 @@ class QuestionServiceTest {
         void shouldReturnAnExceptionWhenTryToSave(){
 
             // ARRANGE
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
+            QuestionFactory.createValidQuestionDTO();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
 
             Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn("INADEQUADO");
 
@@ -111,7 +110,7 @@ class QuestionServiceTest {
         @DisplayName("")
         void shouldReturnQuestionNotFoundException(){
             // ARRANGE
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
 
 
             Mockito.when(questionRepository.findById(3L)).thenReturn(Optional.empty());
@@ -127,8 +126,8 @@ class QuestionServiceTest {
         @DisplayName("")
         void shouldReturnInvalidVersionException(){
             // ARRANGE
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
-            var question = questionFactory.createValidQuestion();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
+            var question = QuestionFactory.createValidQuestion();
 
 
             Mockito.when(questionRepository.findById(3L)).thenReturn(Optional.of(question));
@@ -144,8 +143,8 @@ class QuestionServiceTest {
         @DisplayName("")
         void shouldReturnInappropriateContentException(){
             // ARRANGE
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
-            var question = questionFactory.createValidQuestionWithoutPrevious();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
+            var question = QuestionFactory.createValidQuestionWithoutPrevious();
 
 
             Mockito.when(questionRepository.findById(4L)).thenReturn(Optional.of(question));
@@ -164,12 +163,12 @@ class QuestionServiceTest {
             // ARRANGE
 
             // Version
-            var user = questionFactory.createValidUser();
-            var question = questionFactory.createValidQuestion();
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
+            var user = QuestionFactory.createValidUser();
+            var question = QuestionFactory.createValidQuestion();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
             // Original version
-            var previousQuestion = questionFactory.createValidQuestionWithoutPrevious();
-            var previousQuestionRecordDTO = questionFactory.createValidQuestionDTOWithoutPrevious();
+            var previousQuestion = QuestionFactory.createValidQuestionWithoutPrevious();
+            var previousQuestionRecordDTO = QuestionFactory.createValidQuestionDTOWithoutPrevious();
 
             Mockito.when(questionRepository.findById(previousQuestionRecordDTO.id())).thenReturn(Optional.of(previousQuestion));
             Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn("ADEQUADO");
@@ -198,8 +197,8 @@ class QuestionServiceTest {
         void shouldReturnAllQuestionsWithSuccess(){
 
             // ARRANGE
-            var question = questionFactory.createValidQuestion();
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
+            var question = QuestionFactory.createValidQuestion();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
 
 
             Mockito.when(questionRepository.findAllByOrderByIdAsc()).thenReturn(List.of(question));
@@ -221,8 +220,8 @@ class QuestionServiceTest {
         @Test
         void shouldReturnAQuestionWithSuccess(){
             // ARRANGE
-            var question = questionFactory.createValidQuestion();
-            var questionRecordDTO = questionFactory.createValidQuestionDTO();
+            var question = QuestionFactory.createValidQuestion();
+            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
 
             when(questionRepository.findById(questionIdArgumentCaptor.capture())).thenReturn(Optional.of(question));
             when(mapperQuestion.toQuestionDTO(question)).thenReturn(questionRecordDTO);

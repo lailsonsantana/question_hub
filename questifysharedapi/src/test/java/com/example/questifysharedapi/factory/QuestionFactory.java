@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class QuestionFactory {
+public abstract class QuestionFactory {
 
 
     public static User createValidUser() {

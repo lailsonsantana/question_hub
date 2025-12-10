@@ -26,14 +26,14 @@ public class UserService {
 
     @Transactional
     public User saveUser(UserRecordDTO userRecordDTO) {
-        
-        log.info("User {}" , userRecordDTO);
+
         var possibleUser = userRepository.findByEmail(userRecordDTO.email());
-        UserRole userRole = UserRole.valueOf(userRecordDTO.role().toUpperCase());
-        
+
         if(possibleUser != null){
             throw new DuplicatedException("User already exists!");
         }
+
+        UserRole userRole = UserRole.valueOf(userRecordDTO.role().toUpperCase());
         User user = new User();
         user.setName(userRecordDTO.name());
         user.setRole(userRole);

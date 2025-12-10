@@ -1,6 +1,8 @@
 package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.CommentRecordDTO;
+import com.example.questifysharedapi.exception.QuestionNotFound;
+import com.example.questifysharedapi.exception.UserNotFound;
 import com.example.questifysharedapi.model.Comment;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -34,20 +36,20 @@ public class CommentService {
         Comment comment = new Comment();
         comment.setText(commentRecordDTO.text());
 
-        log.info("O ID da questão É {}",commentRecordDTO.questionId());
         Optional<Question> optionalQuestion = questionRepository.findById(commentRecordDTO.questionId());
-        Question question = questionRepository.findById(commentRecordDTO.questionId()).get();
-        if(optionalQuestion.isPresent()){
-            log.info("ESTA PRESENTE {}");
+        Optional<User> optionalUser = userRepository.findById(commentRecordDTO.userId());
+
+        if(optionalUser.isPresent()){
+            comment.setUser(optionalUser.get());
         }else{
-            log.info("nao ESTA PRESENTE {}");
+            throw  new UserNotFound("User Not Found");
         }
 
-
-
-        User user = userRepository.findById(commentRecordDTO.userId()).get();
-        comment.setQuestion(question);
-        comment.setUser(user);
+        if(optionalQuestion.isPresent()){
+            comment.setQuestion(optionalQuestion.get());
+        }else{
+            throw new QuestionNotFound("Question Not Found");
+        }
 
         return  commentRepository.save(comment);
     }

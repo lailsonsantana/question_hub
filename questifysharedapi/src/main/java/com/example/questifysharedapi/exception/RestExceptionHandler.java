@@ -42,8 +42,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 "                    \" modificar o seu enunciado e envie novamente");
     }*/
 
-    @ExceptionHandler(UserNotExist.class)
-    private ResponseEntity<String> userNotExistHandler(UserNotExist exception){
+    @ExceptionHandler(UserNotFound.class)
+    private ResponseEntity<String> userNotExistHandler(UserNotFound exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This user don't exist");
     }
 

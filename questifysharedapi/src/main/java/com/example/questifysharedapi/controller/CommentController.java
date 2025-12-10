@@ -21,14 +21,9 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<Comment> saveComment(@RequestBody CommentRecordDTO commentRecordDTO){
-        //try{
-            log.info("A ESTRUTURA DO COMMENT RECORD É  {}" ,commentRecordDTO);
-            //log.info("Text {}" ,commentRecordDTO.nameUser());
+
             return ResponseEntity.status(HttpStatus.CREATED).body(commentService.saveComment(commentRecordDTO));
-        //}catch (Exception e){
-            //log.error(Arrays.toString(e.getStackTrace()));
-            //return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        //}
+
     }
 
 
