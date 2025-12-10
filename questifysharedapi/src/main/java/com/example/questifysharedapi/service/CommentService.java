@@ -3,6 +3,7 @@ package com.example.questifysharedapi.service;
 import com.example.questifysharedapi.dto.CommentRecordDTO;
 import com.example.questifysharedapi.exception.QuestionNotFound;
 import com.example.questifysharedapi.exception.UserNotFound;
+import com.example.questifysharedapi.mapper.MapperComment;
 import com.example.questifysharedapi.model.Comment;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -14,12 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -29,7 +26,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
-
+    private final MapperComment mapperComment;
 
     @Transactional
     public Comment saveComment(CommentRecordDTO commentRecordDTO){
@@ -60,24 +57,9 @@ public class CommentService {
 
     @Transactional
     public List<CommentRecordDTO> getCommentsByQuestionId(Long questionId) {
-        List<Comment> comments = new ArrayList<>();
-        comments = commentRepository.findAllByQuestionId(questionId);
-        return comments.stream()
-                .map(comment -> new CommentRecordDTO(
-                        comment.getId(),
-                        comment.getText(),
-                        comment.getUser().getId(),
-                        comment.getQuestion().getId(),
-                        comment.getUser().getName(),
-                        formatDate(comment.getCreatedAt())
-                ))
-                .collect(Collectors.toList());
+
+        return mapperComment.toCommentsDTO(commentRepository.findAllByQuestionId(questionId));
+
     }
 
-    public String formatDate(LocalDateTime date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
-        String formattedDate = date.format(formatter);
-
-        return formattedDate;
-    }
 }

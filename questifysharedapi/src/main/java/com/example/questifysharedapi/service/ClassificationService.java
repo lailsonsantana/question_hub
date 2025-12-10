@@ -47,7 +47,7 @@ public class ClassificationService {
                 classification = existingClassification.get();
                 classification.setRating(classificationRecordDTO.rating());
             } else {
-                // Otherwise makes a new classification
+                // Otherwise create a new classification
                 classification = new Classification();
                 classification.setRating(classificationRecordDTO.rating());
                 classification.setQuestion(question);
@@ -57,8 +57,7 @@ public class ClassificationService {
             // Save the classification or update
             return classificationRepository.save(classification);
         } else {
-
-            // Handle with the case that User or Question not exist
+            // Handle with the case of User or Question not exist
             throw new EntityNotFoundException("User or Question not found");
         }
     }

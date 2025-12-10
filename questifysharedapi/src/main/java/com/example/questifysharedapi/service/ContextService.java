@@ -1,9 +1,11 @@
 package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.ContextRecordDTO;
+import com.example.questifysharedapi.exception.ContextNotFound;
 import com.example.questifysharedapi.model.Context;
 import com.example.questifysharedapi.repository.ContextRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -14,10 +16,10 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class ContextService {
 
-    @Autowired
     private ContextRepository contextRepository;
 
     public Context saveContext(ContextRecordDTO newContext) {
@@ -28,7 +30,11 @@ public class ContextService {
 
     public Context getContext(Long id){
         Optional<Context> opContext = contextRepository.findById(id);
-        return opContext.get();
+        if(opContext.isPresent()){
+            return opContext.get();
+        }
+        throw new ContextNotFound("Context Not Found");
+
     }
 
     public List<Context> getAllContexts(){

@@ -1,0 +1,23 @@
+package com.example.questifysharedapi.mapper;
+
+import com.example.questifysharedapi.dto.CommentRecordDTO;
+import com.example.questifysharedapi.model.Comment;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.Mappings;
+
+import java.util.List;
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface MapperComment {
+
+    @Mappings({
+            @Mapping(source = "user.name", target = "nameUser"),
+            @Mapping(source = "createdAt", target = "createdAt", dateFormat = "dd/MM/yyyy")
+    })
+    CommentRecordDTO toCommentDTO(Comment comment);
+
+    List<CommentRecordDTO> toCommentsDTO(List<Comment> comments);
+
+}
