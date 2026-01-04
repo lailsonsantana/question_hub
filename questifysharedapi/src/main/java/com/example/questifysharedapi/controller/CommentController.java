@@ -1,6 +1,6 @@
 package com.example.questifysharedapi.controller;
 
-import com.example.questifysharedapi.dto.CommentRecordDTO;
+import com.example.questifysharedapi.dto.CommentDTO;
 import com.example.questifysharedapi.model.Comment;
 import com.example.questifysharedapi.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +20,15 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Comment> saveComment(@RequestBody CommentRecordDTO commentRecordDTO){
+    public ResponseEntity<Comment> saveComment(@RequestBody CommentDTO commentDTO){
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.saveComment(commentRecordDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.saveComment(commentDTO));
 
     }
 
 
     @GetMapping("/{questionId}")
-    public ResponseEntity<List<CommentRecordDTO>> getQuestionById(@PathVariable Long questionId){
+    public ResponseEntity<List<CommentDTO>> getQuestionById(@PathVariable Long questionId){
         //Quando você passa o parâmetro usando o PathVariable a forma que vc deve colocar
         // no frontend é diferente de quando vc passa por @RequestParam
         return ResponseEntity.ok(commentService.getCommentsByQuestionId(questionId));

@@ -1,8 +1,8 @@
 package com.example.questifysharedapi.controller;
 
-import com.example.questifysharedapi.dto.ContextRecordDTO;
+import com.example.questifysharedapi.dto.ContextDTO;
 import com.example.questifysharedapi.dto.CredentialsDTO;
-import com.example.questifysharedapi.dto.UserRecordDTO;
+import com.example.questifysharedapi.dto.UserDTO;
 import com.example.questifysharedapi.model.Context;
 import com.example.questifysharedapi.model.User;
 import com.example.questifysharedapi.service.ContextService;
@@ -28,8 +28,8 @@ public class UserController {
     
 
     @PostMapping
-    public ResponseEntity<?> saveUser(@RequestBody UserRecordDTO userRecordDTO){
-            return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userRecordDTO));
+    public ResponseEntity<?> saveUser(@RequestBody UserDTO userDTO){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userDTO));
     }
 
     @GetMapping
@@ -50,7 +50,7 @@ public class UserController {
 
     @PostMapping("/setContext")
     public ResponseEntity<Context> setUserContext(@RequestBody String newContext) {
-        ContextRecordDTO contextRecordDTO = new ContextRecordDTO(newContext);
-        return ResponseEntity.status(HttpStatus.CREATED).body(contextService.saveContext(contextRecordDTO));
+        ContextDTO contextDTO = new ContextDTO(newContext);
+        return ResponseEntity.status(HttpStatus.CREATED).body(contextService.saveContext(contextDTO));
     }
 }

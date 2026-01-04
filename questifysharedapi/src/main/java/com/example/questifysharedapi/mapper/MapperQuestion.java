@@ -1,8 +1,8 @@
 package com.example.questifysharedapi.mapper;
 
 
-import com.example.questifysharedapi.dto.AnswerRecordDTO;
-import com.example.questifysharedapi.dto.QuestionRecordDTO;
+import com.example.questifysharedapi.dto.AnswerDTO;
+import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.model.Answer;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -11,8 +11,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Mappings;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
@@ -24,20 +22,20 @@ public interface MapperQuestion {
             @Mapping(source = "previousVersion.id", target = "previousId"),
             @Mapping(source = "createdAt", target = "createdAt", dateFormat = "dd/MM/yyyy")
     })
-    QuestionRecordDTO toQuestionDTO(Question question);
+    QuestionDTO toQuestionDTO(Question question);
 
     @Mapping(source = "userId", target = "user")
-    Question toQuestion(QuestionRecordDTO questionRecordDTO);
+    Question toQuestion(QuestionDTO questionDTO);
 
-    AnswerRecordDTO toAnswerDTO(Answer answer);
-    Answer toAnswer(AnswerRecordDTO answerRecordDTO);
+    AnswerDTO toAnswerDTO(Answer answer);
+    Answer toAnswer(AnswerDTO answerDTO);
 
 
-    List<QuestionRecordDTO> toQuestionsDTO(List<Question> questions);
-    List<Question> toQuestions(List<QuestionRecordDTO> questionRecordDTOS);
+    List<QuestionDTO> toQuestionsDTO(List<Question> questions);
+    List<Question> toQuestions(List<QuestionDTO> questionDTOS);
 
-    List<AnswerRecordDTO> toAnswersRecordDTO(List<Answer> answers);
-    List<Answer> toAnswers(List<AnswerRecordDTO> answerRecordDTOS);
+    List<AnswerDTO> toAnswersDTO(List<Answer> answers);
+    List<Answer> toAnswers(List<AnswerDTO> answerDTOS);
 
 
     default User mapUser(Long id) {

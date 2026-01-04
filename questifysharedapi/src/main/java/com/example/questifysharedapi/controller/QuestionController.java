@@ -1,7 +1,6 @@
 package com.example.questifysharedapi.controller;
 
-import com.example.questifysharedapi.dto.QuestionRecordDTO;
-import com.example.questifysharedapi.exception.InappropriateContentException;
+import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -24,41 +23,41 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping
-    public ResponseEntity<?> saveQuestion(@RequestBody QuestionRecordDTO questionRecordDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveQuestion(questionRecordDTO));
+    public ResponseEntity<?> saveQuestion(@RequestBody QuestionDTO questionDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveQuestion(questionDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<QuestionRecordDTO>> getAllQuestions(){
+    public ResponseEntity<List<QuestionDTO>> getAllQuestions(){
 
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<QuestionRecordDTO>> filterQuestions(@RequestParam List<String> disciplines){
+    public ResponseEntity<List<QuestionDTO>> filterQuestions(@RequestParam List<String> disciplines){
         
-        List<QuestionRecordDTO> qdto = questionService.filterQuestions(disciplines);
+        List<QuestionDTO> qdto = questionService.filterQuestions(disciplines);
         return ResponseEntity.ok(qdto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<QuestionRecordDTO>> getQuestionsByUserId(@PathVariable Long id){
+    public ResponseEntity<List<QuestionDTO>> getQuestionsByUserId(@PathVariable Long id){
 
-        List<QuestionRecordDTO> qdto = questionService.getAllByUser(id);
+        List<QuestionDTO> qdto = questionService.getAllByUser(id);
         return ResponseEntity.ok(qdto);
     }
 
     @GetMapping("questionId/{id}")
-    public ResponseEntity<QuestionRecordDTO> getQuestionsById(@PathVariable Long id){
+    public ResponseEntity<QuestionDTO> getQuestionsById(@PathVariable Long id){
 
-        QuestionRecordDTO qdto = questionService.getQuestionById(id);
+        QuestionDTO qdto = questionService.getQuestionById(id);
         return ResponseEntity.ok(qdto);
     }
 
     @PostMapping("/new-version/{id}")
-    public ResponseEntity<Question> saveNewVersion(@PathVariable Long id,@RequestBody QuestionRecordDTO questionRecordDTO){
+    public ResponseEntity<Question> saveNewVersion(@PathVariable Long id,@RequestBody QuestionDTO questionDTO){
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveNewVersion(questionRecordDTO , id));
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveNewVersion(questionDTO, id));
         
     }
 

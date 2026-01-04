@@ -25,6 +25,7 @@ spring:
         options:
           temperature: 0.0
 
+
 # Production
 ---
 spring:

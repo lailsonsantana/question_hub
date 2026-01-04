@@ -1,6 +1,6 @@
 package com.example.questifysharedapi.controller;
 
-import com.example.questifysharedapi.dto.ClassificationRecordDTO;
+import com.example.questifysharedapi.dto.ClassificationDTO;
 import com.example.questifysharedapi.model.Classification;
 import com.example.questifysharedapi.service.ClassificationService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ public class ClassificationController {
     private final ClassificationService classificationService;
 
     @PostMapping
-    public ResponseEntity<Classification> saveClassification(@RequestBody ClassificationRecordDTO classificationRecordDTO){
-        log.info("CLASSIFICATION  {}",classificationRecordDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(classificationService.saveClassification(classificationRecordDTO));
+    public ResponseEntity<Classification> saveClassification(@RequestBody ClassificationDTO classificationDTO){
+        log.info("CLASSIFICATION  {}", classificationDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(classificationService.saveClassification(classificationDTO));
 
     }
 

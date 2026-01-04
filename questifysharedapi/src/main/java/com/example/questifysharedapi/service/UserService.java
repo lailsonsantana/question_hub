@@ -1,6 +1,6 @@
 package com.example.questifysharedapi.service;
 
-import com.example.questifysharedapi.dto.UserRecordDTO;
+import com.example.questifysharedapi.dto.UserDTO;
 import com.example.questifysharedapi.exception.DuplicatedException;
 import com.example.questifysharedapi.model.AccessToken;
 import com.example.questifysharedapi.model.User;
@@ -25,20 +25,20 @@ public class UserService {
     private final JwtService jwtService;
 
     @Transactional
-    public User saveUser(UserRecordDTO userRecordDTO) {
+    public User saveUser(UserDTO userDTO) {
 
-        var possibleUser = userRepository.findByEmail(userRecordDTO.email());
+        var possibleUser = userRepository.findByEmail(userDTO.email());
 
         if(possibleUser != null){
             throw new DuplicatedException("User already exists!");
         }
 
-        UserRole userRole = UserRole.valueOf(userRecordDTO.role().toUpperCase());
+        UserRole userRole = UserRole.valueOf(userDTO.role().toUpperCase());
         User user = new User();
-        user.setName(userRecordDTO.name());
+        user.setName(userDTO.name());
         user.setRole(userRole);
-        user.setEmail(userRecordDTO.email());
-        user.setPassword(userRecordDTO.password());
+        user.setEmail(userDTO.email());
+        user.setPassword(userDTO.password());
         encodePassword(user);
         return userRepository.save(user);
     }

@@ -1,8 +1,7 @@
 package com.example.questifysharedapi.factory;
 
-import com.example.questifysharedapi.dto.AnswerRecordDTO;
-import com.example.questifysharedapi.dto.QuestionRecordDTO;
-import com.example.questifysharedapi.mapper.MapperQuestion;
+import com.example.questifysharedapi.dto.AnswerDTO;
+import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.model.Answer;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -31,13 +30,13 @@ public abstract class QuestionFactory {
                 createValidUser() , null , null , "Não Tem" , null ,  3 , 4.6);
     }
 
-    public static QuestionRecordDTO createValidQuestionDTO(){
-        return new QuestionRecordDTO(3L, "Teste", "Math", createValidAnswersDTO(), 3L, "Margaret",
+    public static QuestionDTO createValidQuestionDTO(){
+        return new QuestionDTO(3L, "Teste", "Math", createValidAnswersDTO(), 3L, "Margaret",
             4L, "Não Tem", null, 3, 4.6);
     }
 
-    public static QuestionRecordDTO createValidQuestionDTOWithoutPrevious(){
-        return new QuestionRecordDTO(4L, "Teste", "Math", null, 3L, "Margaret",
+    public static QuestionDTO createValidQuestionDTOWithoutPrevious(){
+        return new QuestionDTO(4L, "Teste", "Math", null, 3L, "Margaret",
                 null, "Não Tem", null, 3, 4.6);
     }
 
@@ -57,19 +56,19 @@ public abstract class QuestionFactory {
         return answers;
     }
 
-    public static List<AnswerRecordDTO> createValidAnswersDTO(){
-        AnswerRecordDTO answerRecordDTO1 = new AnswerRecordDTO("Teste1", false);
-        AnswerRecordDTO answerRecordDTO2 = new AnswerRecordDTO("Teste2", false);
-        AnswerRecordDTO answerRecordDTO3 = new AnswerRecordDTO("Teste3", false);
-        AnswerRecordDTO answerRecordDTO4 = new AnswerRecordDTO("Teste4", true);
-        AnswerRecordDTO answerRecordDTO5 = new AnswerRecordDTO("Teste5", false);
-        List<AnswerRecordDTO> answerRecordDTOS = new ArrayList<>();
-        answerRecordDTOS.add(answerRecordDTO1);
-        answerRecordDTOS.add(answerRecordDTO2);
-        answerRecordDTOS.add(answerRecordDTO3);
-        answerRecordDTOS.add(answerRecordDTO4);
-        answerRecordDTOS.add(answerRecordDTO5);
+    public static List<AnswerDTO> createValidAnswersDTO(){
+        AnswerDTO answerDTO1 = new AnswerDTO("Teste1", false);
+        AnswerDTO answerDTO2 = new AnswerDTO("Teste2", false);
+        AnswerDTO answerDTO3 = new AnswerDTO("Teste3", false);
+        AnswerDTO answerDTO4 = new AnswerDTO("Teste4", true);
+        AnswerDTO answerDTO5 = new AnswerDTO("Teste5", false);
+        List<AnswerDTO> answerDTOS = new ArrayList<>();
+        answerDTOS.add(answerDTO1);
+        answerDTOS.add(answerDTO2);
+        answerDTOS.add(answerDTO3);
+        answerDTOS.add(answerDTO4);
+        answerDTOS.add(answerDTO5);
 
-        return answerRecordDTOS;
+        return answerDTOS;
     }
 }

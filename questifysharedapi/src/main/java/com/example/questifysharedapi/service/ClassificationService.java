@@ -1,6 +1,6 @@
 package com.example.questifysharedapi.service;
 
-import com.example.questifysharedapi.dto.ClassificationRecordDTO;
+import com.example.questifysharedapi.dto.ClassificationDTO;
 import com.example.questifysharedapi.model.Classification;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -26,10 +26,10 @@ public class ClassificationService {
 
 
     @Transactional
-    public Classification saveClassification(ClassificationRecordDTO classificationRecordDTO) {
+    public Classification saveClassification(ClassificationDTO classificationDTO) {
         // Get the User and Question options
-        Optional<Question> opQuestion = questionRepository.findById(classificationRecordDTO.questionId());
-        Optional<User> opUser = userRepository.findById(classificationRecordDTO.userId());
+        Optional<Question> opQuestion = questionRepository.findById(classificationDTO.questionId());
+        Optional<User> opUser = userRepository.findById(classificationDTO.userId());
 
         // Verify if both are presents
         if (opQuestion.isPresent() && opUser.isPresent()) {
@@ -45,11 +45,11 @@ public class ClassificationService {
             if (existingClassification.isPresent()) {
                 // If already a classification update the note
                 classification = existingClassification.get();
-                classification.setRating(classificationRecordDTO.rating());
+                classification.setRating(classificationDTO.rating());
             } else {
                 // Otherwise create a new classification
                 classification = new Classification();
-                classification.setRating(classificationRecordDTO.rating());
+                classification.setRating(classificationDTO.rating());
                 classification.setQuestion(question);
                 classification.setUser(user);
             }

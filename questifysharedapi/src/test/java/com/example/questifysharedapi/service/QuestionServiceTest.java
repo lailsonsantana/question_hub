@@ -1,15 +1,11 @@
 package com.example.questifysharedapi.service;
 
-import com.example.questifysharedapi.dto.QuestionRecordDTO;
 import com.example.questifysharedapi.exception.InappropriateContentException;
 import com.example.questifysharedapi.exception.InvalidVersionException;
 import com.example.questifysharedapi.exception.QuestionNotFound;
 import com.example.questifysharedapi.factory.QuestionFactory;
 import com.example.questifysharedapi.mapper.MapperQuestion;
 import com.example.questifysharedapi.model.Question;
-import com.example.questifysharedapi.model.User;
-import com.example.questifysharedapi.model.UserRole;
-import com.example.questifysharedapi.repository.AnswerRepository;
 import com.example.questifysharedapi.repository.QuestionRepository;
 import com.example.questifysharedapi.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -20,9 +16,6 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

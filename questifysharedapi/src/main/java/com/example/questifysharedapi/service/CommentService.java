@@ -1,6 +1,6 @@
 package com.example.questifysharedapi.service;
 
-import com.example.questifysharedapi.dto.CommentRecordDTO;
+import com.example.questifysharedapi.dto.CommentDTO;
 import com.example.questifysharedapi.exception.QuestionNotFound;
 import com.example.questifysharedapi.exception.UserNotFound;
 import com.example.questifysharedapi.mapper.MapperComment;
@@ -29,12 +29,12 @@ public class CommentService {
     private final MapperComment mapperComment;
 
     @Transactional
-    public Comment saveComment(CommentRecordDTO commentRecordDTO){
+    public Comment saveComment(CommentDTO commentDTO){
         Comment comment = new Comment();
-        comment.setText(commentRecordDTO.text());
+        comment.setText(commentDTO.text());
 
-        Optional<Question> optionalQuestion = questionRepository.findById(commentRecordDTO.questionId());
-        Optional<User> optionalUser = userRepository.findById(commentRecordDTO.userId());
+        Optional<Question> optionalQuestion = questionRepository.findById(commentDTO.questionId());
+        Optional<User> optionalUser = userRepository.findById(commentDTO.userId());
 
         if(optionalUser.isPresent()){
             comment.setUser(optionalUser.get());
@@ -56,7 +56,7 @@ public class CommentService {
     }
 
     @Transactional
-    public List<CommentRecordDTO> getCommentsByQuestionId(Long questionId) {
+    public List<CommentDTO> getCommentsByQuestionId(Long questionId) {
 
         return mapperComment.toCommentsDTO(commentRepository.findAllByQuestionId(questionId));
 

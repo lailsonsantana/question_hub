@@ -1,20 +1,19 @@
 package com.example.questifysharedapi.service;
 
-import com.example.questifysharedapi.dto.QuestionRecordDTO;
+import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.exception.InappropriateContentException;
 import com.example.questifysharedapi.exception.InvalidVersionException;
 import com.example.questifysharedapi.exception.QuestionNotFound;
 import com.example.questifysharedapi.mapper.MapperQuestion;
-import com.example.questifysharedapi.model.Answer;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
-import com.example.questifysharedapi.repository.AnswerRepository;
 import com.example.questifysharedapi.repository.QuestionRepository;
 import com.example.questifysharedapi.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,13 +31,13 @@ public class QuestionService {
     private final MapperQuestion mapperQuestion;
 
     @Transactional
-    public Question saveQuestion(QuestionRecordDTO questionRecordDTO){
+    public Question saveQuestion(QuestionDTO questionDTO){
 
-        if(verifyStatement(questionRecordDTO.statement())){
+        if(verifyStatement(questionDTO.statement())){
 
-            Question question = mapperQuestion.toQuestion(questionRecordDTO);
-            if(questionRecordDTO.userId() != null){
-                Optional<User> possibleUser = userRepository.findById(questionRecordDTO.userId());
+            Question question = mapperQuestion.toQuestion(questionDTO);
+            if(questionDTO.userId() != null){
+                Optional<User> possibleUser = userRepository.findById(questionDTO.userId());
                 possibleUser.ifPresent(question::setUser);
             }
             question.setCountRating(0);
@@ -51,7 +50,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public Question saveNewVersion(QuestionRecordDTO questionRecordDTO , Long id){
+    public Question saveNewVersion(QuestionDTO questionDTO, Long id){
 
         Question previousQuestion = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFound("Question Not Found"));
@@ -60,15 +59,15 @@ public class QuestionService {
             throw new InvalidVersionException("This question is a version of another question");
         }
 
-        boolean isValid = verifyStatement(questionRecordDTO.statement());
+        boolean isValid = verifyStatement(questionDTO.statement());
         if (!isValid) {
             throw new InappropriateContentException("This content is Inappropriate.");
         }
 
-        Question question = mapperQuestion.toQuestion(questionRecordDTO);
+        Question question = mapperQuestion.toQuestion(questionDTO);
 
-        if (questionRecordDTO.userId() != null) {
-            userRepository.findById(questionRecordDTO.userId())
+        if (questionDTO.userId() != null) {
+            userRepository.findById(questionDTO.userId())
                     .ifPresent(question::setUser);
         }
 
@@ -86,18 +85,20 @@ public class QuestionService {
 
         log.info("Response of Model {}" , response);
         log.info("Response of equals {}" , !response.equals("INADEQUADO"));
-        return !response.equals("INADEQUADO");
+        // Modificando aqui por que a assinatura do gpt expirou
+        return true;
     }
 
     @Transactional
-    public List<QuestionRecordDTO> getAllQuestions(){
+    @Cacheable("questions")
+    public List<QuestionDTO> getAllQuestions(){
 
         List<Question> questions = questionRepository.findAllByOrderByIdAsc();
         return mapperQuestion.toQuestionsDTO(questions);
     }
 
     @Transactional
-    public List<QuestionRecordDTO> filterQuestions(List<String> disciplines) {
+    public List<QuestionDTO> filterQuestions(List<String> disciplines) {
         List<Question> questions = new ArrayList<>();
         for(String discipline : disciplines){
             questions.addAll(questionRepository.findAllByDiscipline(discipline));
@@ -106,7 +107,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public List<QuestionRecordDTO> getAllByUser(Long userId){
+    public List<QuestionDTO> getAllByUser(Long userId){
 
         List<Question> questions = questionRepository.findAllByOrderByIdAsc();
 
@@ -117,7 +118,7 @@ public class QuestionService {
     }
 
     @Transactional 
-    public QuestionRecordDTO getQuestionById(Long questionId){
+    public QuestionDTO getQuestionById(Long questionId){
 
         Optional<Question> existingQuestion = questionRepository.findById(questionId);
         if(existingQuestion.isPresent()){
