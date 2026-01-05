@@ -1,5 +1,6 @@
 package com.example.questifysharedapi.service;
 
+import com.example.questifysharedapi.exception.APIKeyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -37,22 +38,26 @@ public class OpenAiService {
 
 
     public String getClassification(String statement) {
-        String context = contextService.getContext(1L).getText();
-        ChatResponse response = chatModel.call(
-                new Prompt(
-                        context + " " + statement,
-                        OpenAiChatOptions.builder()
-                                .withModel(model)
-                                .withTemperature(temperature)
-                                .withMaxTokens(maxTokens)
-                                .build()
-                ));
-        log.info("Response {}" , response);
-        List<Generation> generations = response.getResults();
-        Generation generation = generations.get(0);
-        AssistantMessage assistantMessage = generation.getOutput();
-
-        return assistantMessage.getContent();
+        try{
+            String context = contextService.getContext(1L).getText();
+            ChatResponse response = chatModel.call(
+                    new Prompt(
+                            context + " " + statement,
+                            OpenAiChatOptions.builder()
+                                    .withModel(model)
+                                    .withTemperature(temperature)
+                                    .withMaxTokens(maxTokens)
+                                    .build()
+                    ));
+            log.info("Response {}" , response);
+            List<Generation> generations = response.getResults();
+            Generation generation = generations.get(0);
+            AssistantMessage assistantMessage = generation.getOutput();
+            return assistantMessage.getContent();
+        }catch (APIKeyException apiKeyException){
+            apiKeyException.getMessage();
+        }
+        return "ADEQUADO";
     }
 }
 

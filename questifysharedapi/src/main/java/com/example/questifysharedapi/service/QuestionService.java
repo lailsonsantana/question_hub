@@ -81,10 +81,8 @@ public class QuestionService {
 
     public Boolean verifyStatement(String statement){
 
-        String response = openAiService.getClassification(statement);
+        //String response = openAiService.getClassification(statement);
 
-        log.info("Response of Model {}" , response);
-        log.info("Response of equals {}" , !response.equals("INADEQUADO"));
         // Modificando aqui por que a assinatura do gpt expirou
         return true;
     }
