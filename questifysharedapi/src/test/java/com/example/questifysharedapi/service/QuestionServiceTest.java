@@ -62,7 +62,7 @@ class QuestionServiceTest {
 
 
             Mockito.when(userRepository.findById(questionRecordDTO.userId())).thenReturn(Optional.of(user));
-            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn("ADEQUADO");
+            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
             Mockito.when(mapperQuestion.toQuestion(questionRecordDTO)).thenReturn(question);
             Mockito.when(questionRepository.save(questionArgumentCaptor.capture())).thenReturn(question);
 
@@ -85,7 +85,7 @@ class QuestionServiceTest {
             QuestionFactory.createValidQuestionDTO();
             var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
 
-            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn("INADEQUADO");
+            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
 
             // ACT
             Executable action = () -> questionService.saveQuestion(questionRecordDTO);
@@ -141,7 +141,7 @@ class QuestionServiceTest {
 
 
             Mockito.when(questionRepository.findById(4L)).thenReturn(Optional.of(question));
-            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn("INADEQUADO");
+            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
 
             // ACT
             Executable action = () -> questionService.saveNewVersion(questionRecordDTO, 4L);
@@ -164,7 +164,7 @@ class QuestionServiceTest {
             var previousQuestionRecordDTO = QuestionFactory.createValidQuestionDTOWithoutPrevious();
 
             Mockito.when(questionRepository.findById(previousQuestionRecordDTO.id())).thenReturn(Optional.of(previousQuestion));
-            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn("ADEQUADO");
+            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
             Mockito.when(userRepository.findById(questionRecordDTO.userId())).thenReturn(Optional.of(user));
             Mockito.when(mapperQuestion.toQuestion(questionRecordDTO)).thenReturn(question);
             Mockito.when(questionRepository.save(questionArgumentCaptor.capture())).thenReturn(question);

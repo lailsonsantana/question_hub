@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class OpenAiService {
+public class OpenAiService implements ModeratorService{
 
     private final ContextService contextService;
     private final OpenAiChatModel chatModel;
@@ -37,7 +37,7 @@ public class OpenAiService {
     private Double temperature;
 
 
-    public String getClassification(String statement) {
+    public Boolean getClassification(String statement) {
         try{
             String context = contextService.getContext(1L).getText();
             ChatResponse response = chatModel.call(
@@ -53,11 +53,13 @@ public class OpenAiService {
             List<Generation> generations = response.getResults();
             Generation generation = generations.get(0);
             AssistantMessage assistantMessage = generation.getOutput();
-            return assistantMessage.getContent();
+            if(assistantMessage.getContent().contains("ADEQUADO")){
+                return true;
+            }
         }catch (APIKeyException apiKeyException){
-            apiKeyException.getMessage();
+            throw new APIKeyException("Problemas com a chave de API");
         }
-        return "ADEQUADO";
+        return false;
     }
 }
 
