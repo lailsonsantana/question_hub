@@ -57,10 +57,10 @@ public class Question {
     private LocalDateTime createdAt;
 
     @Column(nullable = true)
-    private Integer countRating;
+    private Integer countRating = 0;
 
     @Column(nullable = true)
-    private Double totalRating;
+    private Double totalRating = 0d;
 
     @PrePersist
     protected void onCreate() {

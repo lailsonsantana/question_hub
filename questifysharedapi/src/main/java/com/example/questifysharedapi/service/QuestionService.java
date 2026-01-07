@@ -40,8 +40,6 @@ public class QuestionService {
                 Optional<User> possibleUser = userRepository.findById(questionDTO.userId());
                 possibleUser.ifPresent(question::setUser);
             }
-            question.setCountRating(0);
-            question.setTotalRating(0d);
             question.getAnswers().forEach(answer -> answer.setQuestion(question));
 
             return questionRepository.save(question);

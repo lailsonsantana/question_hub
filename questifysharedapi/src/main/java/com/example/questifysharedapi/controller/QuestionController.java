@@ -3,6 +3,7 @@ package com.example.questifysharedapi.controller;
 import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.service.QuestionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +24,7 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping
-    public ResponseEntity<?> saveQuestion(@RequestBody QuestionDTO questionDTO){
+    public ResponseEntity<?> saveQuestion(@RequestBody @Valid QuestionDTO questionDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveQuestion(questionDTO));
     }
 

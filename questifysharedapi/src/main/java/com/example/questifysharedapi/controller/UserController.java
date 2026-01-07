@@ -7,6 +7,7 @@ import com.example.questifysharedapi.model.Context;
 import com.example.questifysharedapi.model.User;
 import com.example.questifysharedapi.service.ContextService;
 import com.example.questifysharedapi.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +29,7 @@ public class UserController {
     
 
     @PostMapping
-    public ResponseEntity<?> saveUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> saveUser(@RequestBody @Valid  UserDTO userDTO){
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userDTO));
     }
 
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<?> authenticate(@RequestBody CredentialsDTO credentials){
+    public ResponseEntity<?> authenticate(@RequestBody @Valid CredentialsDTO credentials){
         var token = userService.authenticate(credentials.getEmail(), credentials.getPassword());
 
         if(token == null){
