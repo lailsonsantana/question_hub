@@ -86,7 +86,6 @@ public class QuestionService {
     }
 
     @Transactional
-    @Cacheable("questions")
     public List<QuestionDTO> getAllQuestions(){
 
         List<Question> questions = questionRepository.findAllByOrderByIdAsc();
