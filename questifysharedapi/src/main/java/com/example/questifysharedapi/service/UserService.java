@@ -2,6 +2,7 @@ package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.UserDTO;
 import com.example.questifysharedapi.exception.DuplicatedException;
+import com.example.questifysharedapi.mapper.MapperUser;
 import com.example.questifysharedapi.model.AccessToken;
 import com.example.questifysharedapi.model.User;
 import com.example.questifysharedapi.model.UserRole;
@@ -22,25 +23,21 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MapperUser mapperUser;
     private final JwtService jwtService;
 
     @Transactional
-    public User saveUser(UserDTO userDTO) {
+    public UserDTO saveUser(UserDTO userDTO) {
 
         var possibleUser = userRepository.findByEmail(userDTO.email());
 
         if(possibleUser != null){
             throw new DuplicatedException("User already exists!");
         }
-
-        UserRole userRole = UserRole.valueOf(userDTO.role().toUpperCase());
-        User user = new User();
-        user.setName(userDTO.name());
-        user.setRole(userRole);
-        user.setEmail(userDTO.email());
-        user.setPassword(userDTO.password());
+        User user = mapperUser.toUser(userDTO);
         encodePassword(user);
-        return userRepository.save(user);
+
+        return mapperUser.toUserDTO(userRepository.save(user));
     }
 
     public void deleteById(Long id){

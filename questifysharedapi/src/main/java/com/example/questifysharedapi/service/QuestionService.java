@@ -69,8 +69,6 @@ public class QuestionService {
                     .ifPresent(question::setUser);
         }
 
-        question.setCountRating(0);
-        question.setTotalRating(0d);
         question.setPreviousVersion(previousQuestion);
         question.getAnswers().forEach(answer -> answer.setQuestion(question));
 
@@ -116,6 +114,7 @@ public class QuestionService {
     public QuestionDTO getQuestionById(Long questionId){
 
         Optional<Question> existingQuestion = questionRepository.findById(questionId);
+
         if(existingQuestion.isPresent()){
             return mapperQuestion.toQuestionDTO(existingQuestion.get());
         }
