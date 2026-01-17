@@ -64,9 +64,7 @@ export default function QuestoesPage() {
         try {
             const result = await useServiceQuestion.getQuestionsByDisciplines(disciplineName);
             setQuestions(result);
-            setTimeout(() => {
-         
-            }, 500);
+            setTimeout(() => {}, 500);
         } catch (error) {
             console.error('Erro ao filtrar questões:', error);
         } finally {
@@ -115,26 +113,28 @@ export default function QuestoesPage() {
     return (
         <AuthenticatedPage>
             <Template loading={isProcessing}>
-                <MainTitle titulo='Lista de Questões'/>
 
-                <div className="flex flex-col items-center">
-                    
-                </div>
+                <div className="space-y-4">
 
-                <div className="flex items-start mx-6 justify-between">
+                    <MainTitle titulo='Lista de Questões'/>
 
-                    <div className="flex items-center">
-                        <MultipleSelectCheckmarks onDisciplinesChange={handleDisciplinesChange} />
-                        
-                        <Button label="Filtrar" onClick={subjectFilter} />
+                    <div className="flex items-start mx-6 justify-between">
+
+                        <div className="flex items-center">
+                            <MultipleSelectCheckmarks onDisciplinesChange={handleDisciplinesChange} />
+                            
+                            <Button label="Filtrar" onClick={subjectFilter} />
+                        </div>
+
+                        <Scoreboard correct={acertos} incorrect={erros} />
                     </div>
 
-                    <Scoreboard correct={acertos} incorrect={erros} />
+                    <section className="grid grid-cols-1 gap-8">
+                        {mapperQuestions()}
+                    </section>
+
                 </div>
 
-                <section className="grid grid-cols-1">
-                    {mapperQuestions()}
-                </section>
             </Template>
         </AuthenticatedPage>
     );

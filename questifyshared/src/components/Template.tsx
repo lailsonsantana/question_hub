@@ -33,9 +33,9 @@ export const Template: React.FC<TemplateProps> = ({children, loading}) => {
             {/*<Header />*/}
             <Header />
       
-            <div className="dark:bg-dark-backgroundColor container mx-auto mt-4 sm:mt-8 py-4 sm:px-4 md:px-8 lg:px-16 flex-grow overflow-y-auto">
-              {children}
-            </div>
+                <div className="dark:bg-dark-backgroundColor container mx-auto mt-4 sm:mt-8 py-4 sm:px-4 md:px-8 lg:px-16 overflow-y-auto">
+                    {children}
+                </div>
       
             <Footer />
       

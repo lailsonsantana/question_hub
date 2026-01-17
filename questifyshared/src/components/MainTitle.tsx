@@ -6,13 +6,11 @@ interface MainTitleProps {
 
 const MainTitle: React.FC<MainTitleProps> = ({ titulo }) => {
   return (
-    <div className="flex items-center justify-center mb-16 mt-8 p-4">
-      
-      <h1 className="text-4xl sm:text-5xl font-bold text-[#4D4482] drop-shadow-md">
-        {titulo}
-      </h1>
-      
-    </div>
+
+    <h1 className="flex justify-center text-2xl sm:text-5xl font-bold text-[#4D4482] drop-shadow-md p-16">
+      {titulo}
+    </h1>
+    
   );
 };
 

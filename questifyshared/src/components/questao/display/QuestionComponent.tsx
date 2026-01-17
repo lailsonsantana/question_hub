@@ -5,13 +5,9 @@ import Resultado from "./Resultado";
 import { RenderIf } from "../../Template";
 import Cabecalho from "./Cabecalho";
 import BasicTabs from "./BasicTabs";
-import { Question } from "@/resources/question/question.resource";
+import { Answer, Question } from "@/resources/question/question.resource";
 import Button from "@/components/button/ButtonQ";
 
-interface Answer{
-    text: string;
-    isCorrect: boolean;
-}
 interface QuestionComponentProps{
     id?: number;
     statement: string;
@@ -69,7 +65,7 @@ export const QuestionComponent: React.FC<QuestionComponentProps> = ({id,statemen
 
     return(
 
-        <div className="m-8">
+        <>
             <div className='border border-gray-300 rounded p-4 shadow-md bg-containerColor'>
                 <Cabecalho id={id!} assunto={discipline} autor={nameUser}/>
             </div>
@@ -113,7 +109,7 @@ export const QuestionComponent: React.FC<QuestionComponentProps> = ({id,statemen
                 createdAt!, countRating! , totalRating!
                 )} />
             </div>
-        </div>
+        </>
     )
 }
 
