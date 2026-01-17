@@ -7,6 +7,7 @@ import Cabecalho from "./Cabecalho";
 import BasicTabs from "./BasicTabs";
 import { Answer, Question } from "@/resources/question/question.resource";
 import Button from "@/components/button/ButtonQ";
+import WrapperQuestion from "@/components/wrapper/WrapperQuestion";
 
 interface QuestionComponentProps{
     id?: number;
@@ -65,12 +66,12 @@ export const QuestionComponent: React.FC<QuestionComponentProps> = ({id,statemen
 
     return(
 
-        <>
-            <div className='border border-gray-300 rounded p-4 shadow-md bg-containerColor'>
+        <> 
+            <WrapperQuestion>
                 <Cabecalho id={id!} assunto={discipline} autor={nameUser}/>
-            </div>
+            </WrapperQuestion>
 
-            <div className='border border-gray-300 rounded p-8 shadow-md bg-containerColor'>
+            <WrapperQuestion>
                 <Enunciado text={`${statement}`}/>
                 <div className="pt-4">
                     <ul>
@@ -102,13 +103,13 @@ export const QuestionComponent: React.FC<QuestionComponentProps> = ({id,statemen
                         </div>
                     </RenderIf>
                 </div>
-            </div>
+            </WrapperQuestion>
 
-            <div className="border border-gray-300 rounded p-4 shadow-md bg-containerColor">
+            <WrapperQuestion>
                 <BasicTabs question={new Question(id!,statement,discipline,answers,userId,nameUser, previousId!,justification!,
                 createdAt!, countRating! , totalRating!
                 )} />
-            </div>
+            </WrapperQuestion>
         </>
     )
 }

@@ -167,10 +167,8 @@ export default function FormularioPage() {
 
                                 <Titulo titulo="Escreva o Enunciado" />
 
-                                <div className="w-full">   
-                                    <Tiptap value={watch("statement")} onChange={(value) => setValue("statement", value)} onKeyDown={(e) => e.stopPropagation()}/>
-                                </div>
-
+                                <Tiptap value={watch("statement")} onChange={(value) => setValue("statement", value)} onKeyDown={(e) => e.stopPropagation()}/>
+                                
                             </ContainerForm>
                         
                             <ContainerForm>
@@ -224,12 +222,9 @@ export default function FormularioPage() {
 
                                 <div className="flex flex-row items-center space-x-2 mb-4 mt-8">
 
-                                    
                                     <Button type="button" label="Cancelar" tooltipText="Cancelar envio" onClick={cancelAction} color="bg-[#958ACA] hover:bg-[#362975]"/>
                                     
-                                    
                                     <Button type="submit" label="Enviar" tooltipText="Clique para enviar o enunciado e as alternativas"  color="bg-[#5F53A0] hover:bg-[#362975]"/>
-                                    
                                     
                                 </div>
                             </ContainerForm>
