@@ -2,10 +2,12 @@ package com.example.questifysharedapi.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Builder
 public record QuestionDTO(
         Long id,
         @NotBlank
