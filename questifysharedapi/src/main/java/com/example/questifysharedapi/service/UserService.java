@@ -2,6 +2,7 @@ package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.UserDTO;
 import com.example.questifysharedapi.exception.DuplicatedException;
+import com.example.questifysharedapi.exception.UserNotFound;
 import com.example.questifysharedapi.mapper.MapperUser;
 import com.example.questifysharedapi.model.AccessToken;
 import com.example.questifysharedapi.model.User;
@@ -11,6 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,11 +44,15 @@ public class UserService {
     }
 
     public void deleteById(Long id){
-        userRepository.deleteById(id);
+        if(userRepository.findById(id).isPresent()){
+            userRepository.deleteById(id);
+        }
+        throw new UserNotFound("User wasn't found");
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers(){
+
+        return mapperUser.toUsersDTO(userRepository.findAll());
     }
 
     public User getByEmail(String email) {
@@ -56,13 +63,9 @@ public class UserService {
     public AccessToken authenticate(String email, String password) {
         // Verify if exists any user registered with this email
         var user = getByEmail(email);
-        if(user == null){
-            return null;
-        }
-        // Verify if the typed password is equals the password that is in the database
-        boolean match = passwordEncoder.matches(password ,user.getPassword());
 
-        if(match){
+        // Verify if the typed password is equals the password that is in the database
+        if(user != null && passwordEncoder.matches(password , user.getPassword())){
             return jwtService.generateToken(user);
         }
         return null;

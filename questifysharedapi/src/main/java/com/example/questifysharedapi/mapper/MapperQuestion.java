@@ -40,8 +40,9 @@ public interface MapperQuestion {
 
     default User mapUser(Long id) {
         if (id == null) return null;
-        User user = new User();
-        user.setId(id);
+        User user = User.builder()
+                .id(id)
+                .build();
         return user;
     }
 

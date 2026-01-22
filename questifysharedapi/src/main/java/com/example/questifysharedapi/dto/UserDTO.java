@@ -3,7 +3,9 @@ package com.example.questifysharedapi.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
+@Builder
 public record UserDTO(
         Long id,
         @NotBlank(message = "Nome é obrigatório")

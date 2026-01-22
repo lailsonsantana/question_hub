@@ -8,6 +8,7 @@ import com.example.questifysharedapi.mapper.MapperQuestion;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.repository.QuestionRepository;
 import com.example.questifysharedapi.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,10 @@ class QuestionServiceTest {
     @Captor
     private ArgumentCaptor<Long> questionIdArgumentCaptor;
 
+    @BeforeEach
+    void setUp(){
+
+    }
 
     @Nested
     class saveQuestion{
@@ -62,7 +67,7 @@ class QuestionServiceTest {
 
 
             Mockito.when(userRepository.findById(questionRecordDTO.userId())).thenReturn(Optional.of(user));
-            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
+            //Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
             Mockito.when(mapperQuestion.toQuestion(questionRecordDTO)).thenReturn(question);
             Mockito.when(questionRepository.save(questionArgumentCaptor.capture())).thenReturn(question);
 

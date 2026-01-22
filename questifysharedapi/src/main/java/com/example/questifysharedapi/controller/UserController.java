@@ -4,13 +4,14 @@ import com.example.questifysharedapi.dto.ContextDTO;
 import com.example.questifysharedapi.dto.CredentialsDTO;
 import com.example.questifysharedapi.dto.UserDTO;
 import com.example.questifysharedapi.model.Context;
-import com.example.questifysharedapi.model.User;
 import com.example.questifysharedapi.service.ContextService;
 import com.example.questifysharedapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,13 @@ public class UserController {
     private final ContextService contextService;
     
 
-    @PostMapping
+    @PostMapping // Fazer validação tanto no front quanto no back
     public ResponseEntity<?> saveUser(@RequestBody @Valid  UserDTO userDTO){
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
 

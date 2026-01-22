@@ -14,10 +14,10 @@ import java.util.*;
 @Entity
 @Table(name = "TB_USER")
 @Data // Generate getters, setters, constructors, equals, hashcode
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-//@Builder // It's like a constructor more simplified
+@Builder // It's like a constructor more simplified
 public class User implements UserDetails{
 
     @Id

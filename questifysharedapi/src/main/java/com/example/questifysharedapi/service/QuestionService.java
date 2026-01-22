@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.cache.annotation.Cacheable;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ public class QuestionService {
 
             return questionRepository.save(question);
         }
+
         throw new InappropriateContentException("Esse conteúdo é irrelevante ou inapropriado.");
     }
 
@@ -65,8 +66,7 @@ public class QuestionService {
         Question question = mapperQuestion.toQuestion(questionDTO);
 
         if (questionDTO.userId() != null) {
-            userRepository.findById(questionDTO.userId())
-                    .ifPresent(question::setUser);
+            userRepository.findById(questionDTO.userId()).ifPresent(question::setUser);
         }
 
         question.setPreviousVersion(previousQuestion);
@@ -85,8 +85,8 @@ public class QuestionService {
 
     @Transactional
     public List<QuestionDTO> getAllQuestions(){
-
-        List<Question> questions = questionRepository.findAllByOrderByIdAsc();
+        //Page<Question> pageQuestion = questionRepository.findAll(PageRequest.of(0, 10));
+        List<Question> questions = questionRepository.findAll();
         return mapperQuestion.toQuestionsDTO(questions);
     }
 

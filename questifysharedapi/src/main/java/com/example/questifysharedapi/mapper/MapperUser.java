@@ -7,6 +7,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Mappings;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface MapperUser {
 
@@ -14,4 +16,6 @@ public interface MapperUser {
     UserDTO toUserDTO(User user);
 
     User toUser(UserDTO userDTO);
+
+    List<UserDTO> toUsersDTO(List<User> users);
 }
