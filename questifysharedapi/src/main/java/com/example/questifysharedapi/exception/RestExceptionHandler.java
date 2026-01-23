@@ -47,14 +47,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This user don't exist");
     }
 
-    @ExceptionHandler(QuestionNotFound.class)
-    private ResponseEntity<String> questionNotFound(QuestionNotFound exception){
+    @ExceptionHandler(QuestionNotFoundException.class)
+    private ResponseEntity<String> questionNotFound(QuestionNotFoundException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This question wasn't found");
     }
 
-    @ExceptionHandler(IncorrectPassword.class)
-    private ResponseEntity<String> incorrectPasswordHandler(IncorrectPassword exception){
+    @ExceptionHandler(IncorrectPasswordException.class)
+    private ResponseEntity<String> incorrectPasswordHandler(IncorrectPasswordException exception){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password , try again");
+    }
+
+    @ExceptionHandler(APIKeyException.class)
+    private ResponseEntity<String> apiKeyHandler(APIKeyException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error try to connect OpenAI");
     }
 
 }

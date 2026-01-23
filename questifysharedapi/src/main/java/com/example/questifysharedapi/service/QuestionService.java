@@ -1,9 +1,10 @@
 package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.QuestionDTO;
+import com.example.questifysharedapi.dto.request.QuestionRequest;
 import com.example.questifysharedapi.exception.InappropriateContentException;
 import com.example.questifysharedapi.exception.InvalidVersionException;
-import com.example.questifysharedapi.exception.QuestionNotFound;
+import com.example.questifysharedapi.exception.QuestionNotFoundException;
 import com.example.questifysharedapi.mapper.MapperQuestion;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -31,13 +32,14 @@ public class QuestionService {
     private final MapperQuestion mapperQuestion;
 
     @Transactional
-    public Question saveQuestion(QuestionDTO questionDTO){
+    public Question saveQuestion(QuestionRequest questionRequest){
 
-        if(verifyStatement(questionDTO.statement())){
 
-            Question question = mapperQuestion.toQuestion(questionDTO);
-            if(questionDTO.userId() != null){
-                Optional<User> possibleUser = userRepository.findById(questionDTO.userId());
+        if(openAiService.getClassification((questionRequest.statement()))){
+
+            Question question = mapperQuestion.toQuestion(questionRequest);
+            if(questionRequest.userId() != null){
+                Optional<User> possibleUser = userRepository.findById(questionRequest.userId());
                 possibleUser.ifPresent(question::setUser);
             }
             question.getAnswers().forEach(answer -> answer.setQuestion(question));
@@ -49,24 +51,24 @@ public class QuestionService {
     }
 
     @Transactional
-    public Question saveNewVersion(QuestionDTO questionDTO, Long id){
+    public Question saveNewVersion(QuestionRequest questionRequest, Long id){
 
         Question previousQuestion = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFound("Question Not Found"));
+                .orElseThrow(() -> new QuestionNotFoundException("Question Not Found"));
 
         if (previousQuestion.getPreviousVersion() != null) {
             throw new InvalidVersionException("This question is a version of another question");
         }
 
-        boolean isValid = verifyStatement(questionDTO.statement());
+        boolean isValid = verifyStatement(questionRequest.statement());
         if (!isValid) {
             throw new InappropriateContentException("This content is Inappropriate.");
         }
 
-        Question question = mapperQuestion.toQuestion(questionDTO);
+        Question question = mapperQuestion.toQuestion(questionRequest);
 
-        if (questionDTO.userId() != null) {
-            userRepository.findById(questionDTO.userId()).ifPresent(question::setUser);
+        if (questionRequest.userId() != null) {
+            userRepository.findById(questionRequest.userId()).ifPresent(question::setUser);
         }
 
         question.setPreviousVersion(previousQuestion);
@@ -80,7 +82,7 @@ public class QuestionService {
         //String response = openAiService.getClassification(statement);
 
         // Modificando aqui por que a assinatura do gpt expirou
-        return true;
+        return false;
     }
 
     @Transactional
@@ -118,7 +120,7 @@ public class QuestionService {
         if(existingQuestion.isPresent()){
             return mapperQuestion.toQuestionDTO(existingQuestion.get());
         }
-        throw new QuestionNotFound("Question Not Found");
+        throw new QuestionNotFoundException("Question Not Found");
     }
 
     @Transactional
@@ -143,7 +145,7 @@ public class QuestionService {
             question = existingQuestion.get();
         }
         else{
-            throw new QuestionNotFound("Question Not Found");
+            throw new QuestionNotFoundException("Question Not Found");
         }
 
 

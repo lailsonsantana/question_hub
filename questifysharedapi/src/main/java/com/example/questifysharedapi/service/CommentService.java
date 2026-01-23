@@ -1,7 +1,7 @@
 package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.CommentDTO;
-import com.example.questifysharedapi.exception.QuestionNotFound;
+import com.example.questifysharedapi.exception.QuestionNotFoundException;
 import com.example.questifysharedapi.exception.UserNotFound;
 import com.example.questifysharedapi.mapper.MapperComment;
 import com.example.questifysharedapi.model.Comment;
@@ -45,7 +45,7 @@ public class CommentService {
         if(optionalQuestion.isPresent()){
             comment.setQuestion(optionalQuestion.get());
         }else{
-            throw new QuestionNotFound("Question Not Found");
+            throw new QuestionNotFoundException("Question Not Found");
         }
 
         return  commentRepository.save(comment);

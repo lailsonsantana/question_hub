@@ -1,7 +1,7 @@
 package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.ContextDTO;
-import com.example.questifysharedapi.exception.ContextNotFound;
+import com.example.questifysharedapi.exception.ContextNotFoundException;
 import com.example.questifysharedapi.model.Context;
 import com.example.questifysharedapi.repository.ContextRepository;
 
@@ -32,7 +32,7 @@ public class ContextService {
         if(opContext.isPresent()){
             return opContext.get();
         }
-        throw new ContextNotFound("Context Not Found");
+        throw new ContextNotFoundException("Context Not Found");
 
     }
 

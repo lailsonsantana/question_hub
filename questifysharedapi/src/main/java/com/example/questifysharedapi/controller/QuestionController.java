@@ -1,6 +1,7 @@
 package com.example.questifysharedapi.controller;
 
 import com.example.questifysharedapi.dto.QuestionDTO;
+import com.example.questifysharedapi.dto.request.QuestionRequest;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.service.QuestionService;
 import jakarta.validation.Valid;
@@ -24,8 +25,8 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping
-    public ResponseEntity<?> saveQuestion(@RequestBody @Valid QuestionDTO questionDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveQuestion(questionDTO));
+    public ResponseEntity<?> saveQuestion(@RequestBody @Valid QuestionRequest questionRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveQuestion(questionRequest));
     }
 
     @GetMapping
@@ -56,9 +57,9 @@ public class QuestionController {
     }
 
     @PostMapping("/new-version/{id}")
-    public ResponseEntity<Question> saveNewVersion(@PathVariable Long id,@RequestBody QuestionDTO questionDTO){
+    public ResponseEntity<Question> saveNewVersion(@PathVariable Long id,@RequestBody QuestionRequest questionRequest){
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveNewVersion(questionDTO, id));
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveNewVersion(questionRequest, id));
         
     }
 

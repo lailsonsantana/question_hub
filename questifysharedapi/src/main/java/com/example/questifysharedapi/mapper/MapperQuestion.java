@@ -3,6 +3,7 @@ package com.example.questifysharedapi.mapper;
 
 import com.example.questifysharedapi.dto.AnswerDTO;
 import com.example.questifysharedapi.dto.QuestionDTO;
+import com.example.questifysharedapi.dto.request.QuestionRequest;
 import com.example.questifysharedapi.model.Answer;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -25,7 +26,7 @@ public interface MapperQuestion {
     QuestionDTO toQuestionDTO(Question question);
 
     @Mapping(source = "userId", target = "user")
-    Question toQuestion(QuestionDTO questionDTO);
+    Question toQuestion(QuestionRequest questionRequest);
 
     AnswerDTO toAnswerDTO(Answer answer);
     Answer toAnswer(AnswerDTO answerDTO);

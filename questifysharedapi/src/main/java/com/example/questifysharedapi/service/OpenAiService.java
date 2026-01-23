@@ -37,27 +37,23 @@ public class OpenAiService implements ModeratorService{
     private Double temperature;
 
 
-    public Boolean getClassification(String statement) {
-        try{
-            String context = contextService.getContext(1L).getText();
-            ChatResponse response = chatModel.call(
-                    new Prompt(
-                            context + " " + statement,
-                            OpenAiChatOptions.builder()
-                                    .withModel(model)
-                                    .withTemperature(temperature)
-                                    .withMaxTokens(maxTokens)
-                                    .build()
-                    ));
-            log.info("Response {}" , response);
-            List<Generation> generations = response.getResults();
-            Generation generation = generations.get(0);
-            AssistantMessage assistantMessage = generation.getOutput();
-            if(assistantMessage.getContent().contains("ADEQUADO")){
-                return true;
-            }
-        }catch (APIKeyException apiKeyException){
-            throw new APIKeyException("Problemas com a chave de API");
+    public Boolean getClassification(String statement) throws APIKeyException{
+        String context = contextService.getContext(1L).getText();
+        ChatResponse response = chatModel.call(
+                new Prompt(
+                        context + " " + statement,
+                        OpenAiChatOptions.builder()
+                                .withModel(model)
+                                .withTemperature(temperature)
+                                .withMaxTokens(maxTokens)
+                                .build()
+                ));
+        log.info("Response {}" , response);
+        List<Generation> generations = response.getResults();
+        Generation generation = generations.get(0);
+        AssistantMessage assistantMessage = generation.getOutput();
+        if(assistantMessage.getContent().contains("ADEQUADO")){
+            return true;
         }
         return false;
     }

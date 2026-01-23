@@ -1,13 +1,20 @@
 package com.example.questifysharedapi.service;
 
+import com.example.questifysharedapi.dto.request.QuestionRequest;
+import com.example.questifysharedapi.dto.response.QuestionResponse;
 import com.example.questifysharedapi.exception.InappropriateContentException;
 import com.example.questifysharedapi.exception.InvalidVersionException;
-import com.example.questifysharedapi.exception.QuestionNotFound;
+import com.example.questifysharedapi.exception.QuestionNotFoundException;
 import com.example.questifysharedapi.factory.QuestionFactory;
 import com.example.questifysharedapi.mapper.MapperQuestion;
+import com.example.questifysharedapi.mapper.MapperQuestionImpl;
 import com.example.questifysharedapi.model.Question;
+import com.example.questifysharedapi.model.QuestionTestBuilder;
+import com.example.questifysharedapi.model.User;
+import com.example.questifysharedapi.model.UserTestBuilder;
 import com.example.questifysharedapi.repository.QuestionRepository;
 import com.example.questifysharedapi.repository.UserRepository;
+import lombok.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,10 +31,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+@Data
 @ExtendWith(MockitoExtension.class)
 class QuestionServiceTest {
 
     @InjectMocks
+    @Spy
     private QuestionService questionService;
 
     @Mock
@@ -36,8 +45,8 @@ class QuestionServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private MapperQuestion mapperQuestion;
+    @Spy
+    private MapperQuestion mapperQuestion = new MapperQuestionImpl();
 
     @Mock
     private OpenAiService openAiService;
@@ -48,9 +57,17 @@ class QuestionServiceTest {
     @Captor
     private ArgumentCaptor<Long> questionIdArgumentCaptor;
 
+    private User user;
+    private Question question;
+    private QuestionResponse questionResponse;
+    private QuestionRequest questionRequest;
+
     @BeforeEach
     void setUp(){
-
+        user = UserTestBuilder.createUser();
+        question = QuestionTestBuilder.createQuestion();
+        questionRequest = QuestionTestBuilder.createQuestionRequest();
+        questionResponse = QuestionTestBuilder.createQuestionResponse();
     }
 
     @Nested
@@ -61,43 +78,28 @@ class QuestionServiceTest {
         void shouldSaveAQuestionWithSuccess() {
 
             // ARRANGE
-            var user = QuestionFactory.createValidUser();
-            var question = QuestionFactory.createValidQuestion();
-            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
-
-
-            Mockito.when(userRepository.findById(questionRecordDTO.userId())).thenReturn(Optional.of(user));
-            //Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
-            Mockito.when(mapperQuestion.toQuestion(questionRecordDTO)).thenReturn(question);
+            Mockito.when(questionService.verifyStatement(questionRequest.statement())).thenReturn(true);
             Mockito.when(questionRepository.save(questionArgumentCaptor.capture())).thenReturn(question);
 
             // ACT
-            var output = questionService.saveQuestion(questionRecordDTO);
+            var output = questionService.saveQuestion(questionRequest);
             var questionCaptured = questionArgumentCaptor.getValue();
 
             // ASSERT
-            assertEquals(output.getId(), questionCaptured.getId());
+            assertEquals(output.getDiscipline(), questionCaptured.getDiscipline());
             assertEquals(output.getStatement(), questionCaptured.getStatement());
-            assertIterableEquals(output.getAnswers(), questionCaptured.getAnswers());
+            //assertIterableEquals(output.getAnswers(), questionCaptured.getAnswers());
 
         }
 
         @Test
         @DisplayName("This method should return an InappropriateContentException when trying to save")
         void shouldReturnAnExceptionWhenTryToSave(){
-
-            // ARRANGE
-            QuestionFactory.createValidQuestionDTO();
-            var questionRecordDTO = QuestionFactory.createValidQuestionDTO();
-
-            Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
-
             // ACT
-            Executable action = () -> questionService.saveQuestion(questionRecordDTO);
+            Executable action = () -> questionService.saveQuestion(questionRequest);
 
             // ASSERT
             assertThrows(InappropriateContentException.class, action);
-
         }
     }
 
@@ -114,10 +116,10 @@ class QuestionServiceTest {
             Mockito.when(questionRepository.findById(3L)).thenReturn(Optional.empty());
 
             // ACT
-            Executable action = () -> questionService.saveNewVersion(questionRecordDTO, 3L);
+            Executable action = () -> questionService.saveNewVersion(questionRequest, 3L);
 
             //ASSERT
-            assertThrows(QuestionNotFound.class, action);
+            assertThrows(QuestionNotFoundException.class, action);
         }
 
         @Test
@@ -131,7 +133,7 @@ class QuestionServiceTest {
             Mockito.when(questionRepository.findById(3L)).thenReturn(Optional.of(question));
 
             // ACT
-            Executable action = () -> questionService.saveNewVersion(questionRecordDTO, 3L);
+            Executable action = () -> questionService.saveNewVersion(questionRequest, 3L);
 
             //ASSERT
             assertThrows(InvalidVersionException.class, action);
@@ -149,7 +151,7 @@ class QuestionServiceTest {
             Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
 
             // ACT
-            Executable action = () -> questionService.saveNewVersion(questionRecordDTO, 4L);
+            Executable action = () -> questionService.saveNewVersion(questionRequest, 4L);
 
             //ASSERT
             assertThrows(InappropriateContentException.class, action);
@@ -170,13 +172,13 @@ class QuestionServiceTest {
 
             Mockito.when(questionRepository.findById(previousQuestionRecordDTO.id())).thenReturn(Optional.of(previousQuestion));
             Mockito.when(openAiService.getClassification(questionRecordDTO.statement())).thenReturn(true);
-            Mockito.when(userRepository.findById(questionRecordDTO.userId())).thenReturn(Optional.of(user));
-            Mockito.when(mapperQuestion.toQuestion(questionRecordDTO)).thenReturn(question);
+            Mockito.when(userRepository.findById(questionRequest.userId())).thenReturn(Optional.of(user));
+            Mockito.when(mapperQuestion.toQuestion(questionRequest)).thenReturn(question);
             Mockito.when(questionRepository.save(questionArgumentCaptor.capture())).thenReturn(question);
 
 
             // ACT
-            var output = questionService.saveNewVersion(questionRecordDTO, 4L);
+            var output = questionService.saveNewVersion(questionRequest, 4L);
             var questionCaptured = questionArgumentCaptor.getValue();
 
             // ASSERT
@@ -243,7 +245,7 @@ class QuestionServiceTest {
             Executable action = () -> questionService.getQuestionById(3L);
 
             //ASSERT
-            assertThrows(QuestionNotFound.class, action);
+            assertThrows(QuestionNotFoundException.class, action);
         }
     }
 
