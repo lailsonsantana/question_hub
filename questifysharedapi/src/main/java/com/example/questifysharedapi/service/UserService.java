@@ -6,28 +6,34 @@ import com.example.questifysharedapi.exception.UserNotFound;
 import com.example.questifysharedapi.mapper.MapperUser;
 import com.example.questifysharedapi.model.AccessToken;
 import com.example.questifysharedapi.model.User;
-import com.example.questifysharedapi.model.UserRole;
 import com.example.questifysharedapi.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-@Slf4j
+//@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MapperUser mapperUser;
     private final JwtService jwtService;
+
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
 
     @Transactional
     public UserDTO saveUser(UserDTO userDTO) {
@@ -55,6 +61,7 @@ public class UserService {
         return mapperUser.toUsersDTO(userRepository.findAll());
     }
 
+    @Transactional
     public User getByEmail(String email) {
         return userRepository.findByEmail(email);
     }

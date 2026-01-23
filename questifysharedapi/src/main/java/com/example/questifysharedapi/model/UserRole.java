@@ -2,9 +2,9 @@ package com.example.questifysharedapi.model;
 
 public enum UserRole {
     
-    ADMIN("admin"),
-    STUDENT("student"),
-    TEACHER("teacher");
+    ADMIN("ADMIN"),
+    STUDENT("STUDENT"),
+    TEACHER("TEACHER");
 
     private String role;
 
