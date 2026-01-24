@@ -4,6 +4,7 @@ package com.example.questifysharedapi.mapper;
 import com.example.questifysharedapi.dto.AnswerDTO;
 import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.dto.request.QuestionRequest;
+import com.example.questifysharedapi.dto.response.QuestionResponse;
 import com.example.questifysharedapi.model.Answer;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.model.User;
@@ -18,12 +19,11 @@ import java.util.List;
 public interface MapperQuestion {
 
     @Mappings({
-            @Mapping(source = "user.id", target = "userId"),
             @Mapping(source = "user.name", target = "nameUser"),
             @Mapping(source = "previousVersion.id", target = "previousId"),
             @Mapping(source = "createdAt", target = "createdAt", dateFormat = "dd/MM/yyyy")
     })
-    QuestionDTO toQuestionDTO(Question question);
+    QuestionResponse toQuestionResponse(Question question);
 
     @Mapping(source = "userId", target = "user")
     Question toQuestion(QuestionRequest questionRequest);
@@ -32,8 +32,8 @@ public interface MapperQuestion {
     Answer toAnswer(AnswerDTO answerDTO);
 
 
-    List<QuestionDTO> toQuestionsDTO(List<Question> questions);
-    List<Question> toQuestions(List<QuestionDTO> questionDTOS);
+    List<QuestionResponse> toQuestionsResponse(List<Question> questions);
+    List<Question> toQuestions(List<QuestionRequest> questionsRequest);
 
     List<AnswerDTO> toAnswersDTO(List<Answer> answers);
     List<Answer> toAnswers(List<AnswerDTO> answerDTOS);

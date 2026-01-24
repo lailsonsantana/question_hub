@@ -56,43 +56,23 @@ public class UserService {
     }
 
     public User getByEmail(String email) {
-        System.out.println(userRepository.findByEmail(email).toString());
+
         return userRepository.findByEmail(email);
     }
-
-    /*@Transactional
-    public AccessToken authenticate(String email, String password) {
-        // Verify if exists any user registered with this email
-        var user = getByEmail(email);
-
-        // Verify if the typed password is equals the password that is in the database
-        if(user != null && passwordEncoder.matches(password , user.getPassword())){
-            return jwtService.generateToken(user);
-        }
-        return null;
-    }*/
 
     @Transactional
     public AccessToken authenticate(String email, String password) {
         // Verify if exists any user registered with this email
-        System.out.println("ENTREI NO AUTENTICATE");
         var user = getByEmail(email);
-        System.out.println(user);
-        if(user == null){
-            System.out.println("USUARIO NULO");
-            return null;
-        }
-        System.out.println("PASSEI DO IF");
-        // Verify if the typed password is equals the password that is in the database
-        boolean match = passwordEncoder.matches(password ,user.getPassword());
 
-        if(match){
-            log.info("TEMOS UM MATCH");
+        // Verify if the typed password is equals the password that is in the database
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             return jwtService.generateToken(user);
         }
-        log.info("Retorne nulo");
         return null;
     }
+
+
 
     private void encodePassword(User user){
         String originalPassword = user.getPassword();

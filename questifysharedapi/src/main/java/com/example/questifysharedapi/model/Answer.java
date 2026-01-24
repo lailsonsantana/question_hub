@@ -1,6 +1,7 @@
 package com.example.questifysharedapi.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +25,7 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(name = "question_id",nullable = false) // foreigner key
-    @JsonIgnore // Used to resolve serialization problems
+    @JsonIgnore
     private Question question;
 
 }

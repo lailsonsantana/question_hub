@@ -5,7 +5,6 @@ import com.example.questifysharedapi.exception.DuplicatedException;
 import com.example.questifysharedapi.mapper.MapperUser;
 import com.example.questifysharedapi.mapper.MapperUserImpl;
 import com.example.questifysharedapi.model.User;
-import com.example.questifysharedapi.model.UserRole;
 import com.example.questifysharedapi.model.UserTestBuilder;
 import com.example.questifysharedapi.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static reactor.core.publisher.Mono.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -87,6 +87,8 @@ class UserServiceTest {
             assertThrows(DuplicatedException.class, () -> userService.saveUser(userDTO));
         }
     }
+
+
 
     @Test
     void getAllUsers() {

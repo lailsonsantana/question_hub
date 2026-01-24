@@ -2,6 +2,7 @@ package com.example.questifysharedapi.service;
 
 import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.dto.request.QuestionRequest;
+import com.example.questifysharedapi.dto.response.QuestionResponse;
 import com.example.questifysharedapi.exception.InappropriateContentException;
 import com.example.questifysharedapi.exception.InvalidVersionException;
 import com.example.questifysharedapi.exception.QuestionNotFoundException;
@@ -32,7 +33,7 @@ public class QuestionService {
     private final MapperQuestion mapperQuestion;
 
     @Transactional
-    public Question saveQuestion(QuestionRequest questionRequest){
+    public QuestionResponse saveQuestion(QuestionRequest questionRequest){
 
 
         if(openAiService.getClassification((questionRequest.statement()))){
@@ -44,7 +45,7 @@ public class QuestionService {
             }
             question.getAnswers().forEach(answer -> answer.setQuestion(question));
 
-            return questionRepository.save(question);
+            return mapperQuestion.toQuestionResponse(questionRepository.save(question));
         }
 
         throw new InappropriateContentException("Esse conteúdo é irrelevante ou inapropriado.");
@@ -60,8 +61,7 @@ public class QuestionService {
             throw new InvalidVersionException("This question is a version of another question");
         }
 
-        boolean isValid = verifyStatement(questionRequest.statement());
-        if (!isValid) {
+        if (! openAiService.getClassification(questionRequest.statement())) {
             throw new InappropriateContentException("This content is Inappropriate.");
         }
 
@@ -77,48 +77,41 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    public Boolean verifyStatement(String statement){
-
-        //String response = openAiService.getClassification(statement);
-
-        // Modificando aqui por que a assinatura do gpt expirou
-        return false;
-    }
 
     @Transactional
-    public List<QuestionDTO> getAllQuestions(){
+    public List<QuestionResponse> getAllQuestions(){
         //Page<Question> pageQuestion = questionRepository.findAll(PageRequest.of(0, 10));
-        List<Question> questions = questionRepository.findAll();
-        return mapperQuestion.toQuestionsDTO(questions);
+        List<Question> questions = questionRepository.findAllByOrderByIdAsc();
+        return mapperQuestion.toQuestionsResponse(questions);
     }
 
     @Transactional
-    public List<QuestionDTO> filterQuestions(List<String> disciplines) {
+    public List<QuestionResponse> filterQuestions(List<String> disciplines) {
         List<Question> questions = new ArrayList<>();
         for(String discipline : disciplines){
             questions.addAll(questionRepository.findAllByDiscipline(discipline));
         }
-        return mapperQuestion.toQuestionsDTO(questions);
+        return mapperQuestion.toQuestionsResponse(questions);
     }
 
     @Transactional
-    public List<QuestionDTO> getAllByUser(Long userId){
+    public List<QuestionResponse> getAllByUser(Long userId){
 
         List<Question> questions = questionRepository.findAllByOrderByIdAsc();
 
-        return mapperQuestion.toQuestionsDTO(
+        return mapperQuestion.toQuestionsResponse(
                questions.stream().filter(question -> question.getUser().getId()
                        .equals(userId)).toList()
         );
     }
 
     @Transactional 
-    public QuestionDTO getQuestionById(Long questionId){
+    public QuestionResponse getQuestionById(Long questionId){
 
         Optional<Question> existingQuestion = questionRepository.findById(questionId);
 
         if(existingQuestion.isPresent()){
-            return mapperQuestion.toQuestionDTO(existingQuestion.get());
+            return mapperQuestion.toQuestionResponse(existingQuestion.get());
         }
         throw new QuestionNotFoundException("Question Not Found");
     }

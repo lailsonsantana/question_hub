@@ -2,6 +2,7 @@ package com.example.questifysharedapi.controller;
 
 import com.example.questifysharedapi.dto.QuestionDTO;
 import com.example.questifysharedapi.dto.request.QuestionRequest;
+import com.example.questifysharedapi.dto.response.QuestionResponse;
 import com.example.questifysharedapi.model.Question;
 import com.example.questifysharedapi.service.QuestionService;
 import jakarta.validation.Valid;
@@ -30,30 +31,27 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<QuestionDTO>> getAllQuestions(){
+    public ResponseEntity<List<QuestionResponse>> getAllQuestions(){
 
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<QuestionDTO>> filterQuestions(@RequestParam List<String> disciplines){
-        
-        List<QuestionDTO> qdto = questionService.filterQuestions(disciplines);
-        return ResponseEntity.ok(qdto);
+    public ResponseEntity<List<QuestionResponse>> filterQuestions(@RequestParam List<String> disciplines){
+
+        return ResponseEntity.ok(questionService.filterQuestions(disciplines));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<QuestionDTO>> getQuestionsByUserId(@PathVariable Long id){
+    public ResponseEntity<List<QuestionResponse>> getQuestionsByUserId(@PathVariable Long id){
 
-        List<QuestionDTO> qdto = questionService.getAllByUser(id);
-        return ResponseEntity.ok(qdto);
+        return ResponseEntity.ok(questionService.getAllByUser(id));
     }
 
     @GetMapping("questionId/{id}")
-    public ResponseEntity<QuestionDTO> getQuestionsById(@PathVariable Long id){
+    public ResponseEntity<QuestionResponse> getQuestionsById(@PathVariable Long id){
 
-        QuestionDTO qdto = questionService.getQuestionById(id);
-        return ResponseEntity.ok(qdto);
+        return ResponseEntity.ok(questionService.getQuestionById(id));
     }
 
     @PostMapping("/new-version/{id}")
