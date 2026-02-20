@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/questionhub
-    username: postgres
-    password: vasco123
+    username: ${QUESTIONHUB_DB_USERNAME}
+    password: ${QUESTIONHUB_DB_PASSWORD}
   jpa:
     database: POSTGRESQL
     hibernate:
@@ -31,6 +31,9 @@ spring:
       org.hibernate.type.descriptor.sql.BasicBinder: TRACE
       org.springframework.orm.jpa: DEBUG
       org.springframework.transaction: DEBUG
+  mvc:
+    problemdetails:
+      enabled: true
 
 # Production
 ---

@@ -32,8 +32,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        // This is the implementation from password encoder that will be
-        // utilized on application
+        // A specific implementation
         return new BCryptPasswordEncoder();
     }
 
@@ -59,7 +58,6 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedOrigins(List.of("https://questify-shared-project-1.onrender.com","http://localhost:3000"));
-        //http://localhost:3000
         UrlBasedCorsConfigurationSource cors = new UrlBasedCorsConfigurationSource();
         // Define what url's might have access this api
         // To our context all url's are enable

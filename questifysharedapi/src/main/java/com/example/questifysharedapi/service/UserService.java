@@ -35,7 +35,7 @@ public class UserService {
         var possibleUser = userRepository.findByEmail(userDTO.email());
 
         if(possibleUser != null){
-            throw new DuplicatedException("User already exists!");
+            throw new DuplicatedException("ESSE EMAIL PERTENCE A UM USUÁRIO, INSIRA UM NOVO EMAIL OU TENTE LOGAR NESTE");
         }
         User user = mapperUser.toUser(userDTO);
         encodePassword(user);
